@@ -65,9 +65,45 @@ async function getCourses() {
         .limit(10)
         .sort({ name: 1 }) //1: ascending, -1: descending
         .count()
-        // .select({ name: 1, tags: 1 });
+    // .select({ name: 1, tags: 1 });
     console.log(courses);
 }
 
 getCourses();
 // createCourse();
+
+
+// Approach: Query first
+// findById()
+// Modify its properties
+// save()
+async function updateCourse(id) {
+    const course = await Course.findById(id);
+    if (!course) return;
+
+    course.isPublished = true;
+    course.author = 'Another author1';
+    const result = await course.save();
+    console.log(result);
+
+    // course.set({
+    //     isPublished: true,
+    //     author: 'Another author'
+    // });
+}
+// updateCourse('5d8f34e9ce6d060451f47b65');
+
+// Approach: Update first
+// Update directly
+// Optionally: get the updated docu`ment
+async function updateCourse2(id) {
+
+    const result = await Course.update({ _id: id }, {
+        $set: {
+            author: 'Artem',
+            isPublished: false
+        }
+    });
+    console.log(result);
+}
+updateCourse2('5d8f34e9ce6d060451f47b65');
